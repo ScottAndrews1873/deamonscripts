@@ -28,17 +28,17 @@ install-service-wpa: create-service-dir
 	install -m ${MODE} services/wpa ${LIBDIR}
 
 install-dhcpd: create-dirs
-	install -m ${MODE} init.d/dhcpd ${EXTDIR}/rc.d/init.d/dhcpd
+	install -m ${MODE} init.d/dhcpd ${EXTDIR}/init.d/dhcpd
 	install -m ${CONFMODE} sysconfig/dhcpd ${EXTDIR}/sysconfig/dhcpd
 
 install-fcron: create-dirs
-	install -m ${MODE} init.d/fcron ${EXTDIR}/rc.d/init.d/
+	install -m ${MODE} init.d/fcron ${EXTDIR}/init.d/
 
 install-ntpd: create-dirs
-	install -m ${MODE} init.d/ntpd ${EXTDIR}/rc.d/init.d/
+	install -m ${MODE} init.d/ntpd ${EXTDIR}/init.d/
 
 install-sshd: create-dirs
-	install -m ${MODE} init.d/sshd ${EXTDIR}/rc.d/init.d/
+	install -m ${MODE} init.d/sshd ${EXTDIR}/init.d/
 
 .PHONY: all archive create-dirs create-service-dir \
 	install-service-dhcpcd \
