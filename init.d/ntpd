@@ -7,15 +7,15 @@
 ########################################################################
 
 ### BEGIN INIT INFO
-# Provides:            ntpd
-# Required-Start:      $time $network
-# Should-Start:        networkmanager wicd
-# Required-Stop:       $network
-# Should-Stop:         networkmanager wicd
-# Default-Start:       3 4 5
-# Default-Stop:        0 1 2 6
-# Short-Description:   NTP Network Time Protocol
-# Description:         NTP Syncronizes time with time servers worldwide
+# Provides: ntpd
+# Required-Start: $time $network
+# Should-Start: networkmanager wicd
+# Required-Stop: $network
+# Should-Stop: networkmanager wicd
+# Default-Start: 3 4 5
+# Default-Stop: 0 1 2 6
+# Short-Description: NTP Network Time Protocol
+# Description: NTP Syncronizes time with time servers worldwide
 ### END INIT INFO
 
 source /lib/lsb/init-functions
