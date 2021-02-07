@@ -17,7 +17,7 @@
 # Short-Description: Starts Unbound DNS resolver
 ### END INIT INFO
 
-. /lib/lsb/init-functions
+source /lib/lsb/init-functions
 
 case "${1}" in
 	start)	log_info_msg "Starting Unbound DNS resolver..."

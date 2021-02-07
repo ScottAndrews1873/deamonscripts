@@ -58,10 +58,20 @@ install-nfs-client: create-dirs
 install-nfs-server: create-dirs
 	install -m ${MODE} init.d/nfs-server ${EXTDIR}/init.d/
 
+install-netfs: create-dirs
+	install -m ${MODE} init.d/netfs ${EXTDIR}/init.d/
+
 .PHONY: all archive create-dirs create-service-dir \
 	install-service-dhcpcd \
 	install-service-wpa \
 	install-dhcpd \
 	install-fcron \
 	install-ntpd \
-	install-sshd
+	install-sshd \
+	install-rpcbind \
+	install-dovecot \
+	install-exim \
+	install-unbound \
+	install-nfs-client \
+	install-nfs-server \
+	install-netfs
