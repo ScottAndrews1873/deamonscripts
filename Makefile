@@ -40,6 +40,24 @@ install-ntpd: create-dirs
 install-sshd: create-dirs
 	install -m ${MODE} init.d/sshd ${EXTDIR}/init.d/
 
+install-rpcbind: create-dirs
+	install -m ${MODE} init.d/rpcbind ${EXTDIR}/init.d/
+
+install-dovecot: create-dirs
+	install -m ${MODE} init.d/dovecot ${EXTDIR}/init.d/
+
+install-exim: create-dirs
+	install -m ${MODE} init.d/exim ${EXTDIR}/init.d/
+
+install-unbound: create-dirs
+	install -m ${MODE} init.d/unbound ${EXTDIR}/init.d/
+
+install-nfs-client: create-dirs
+	install -m ${MODE} init.d/nfs-client ${EXTDIR}/init.d/
+
+install-nfs-server: create-dirs
+	install -m ${MODE} init.d/nfs-server ${EXTDIR}/init.d/
+
 .PHONY: all archive create-dirs create-service-dir \
 	install-service-dhcpcd \
 	install-service-wpa \

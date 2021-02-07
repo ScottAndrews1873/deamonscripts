@@ -41,7 +41,7 @@ case "${1}" in
 			evaluate_retval; ;;
 	restart)	${0} stop; sleep 1; ${0} start; ;;
 	status)	statusproc /usr/sbin/sshd; ;;
-		*)	echo "Usage: ${0} {start|stop|reload|restart|status}"
-			exit 1; ;;
+	*)	echo "Usage: ${0} {start|stop|reload|restart|status}"
+		exit 1; ;;
 esac
 # End sshd bootscript
