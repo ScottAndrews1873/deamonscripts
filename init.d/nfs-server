@@ -22,45 +22,69 @@ source /lib/lsb/init-functions
 source /etc/sysconfig/nfs-server
 
  case "${1}" in
-	start)	log_info_msg "Starting NFS statd..."
+	start)
+		log_info_msg "Checking /proc/fs/nfsd..."
+		[ -d /proc/fs/nfsd ];
+		evaluate_retval
+		log_info_msg "Exporting NFS Filesystems..."
+		/sbin/exportfs -va 2>&1 > /dev/null
+		evaluate_retval
+		log_info_msg "Starting NFS mountd..."
+		start_daemon /sbin/rpc.mountd;evaluate_retval
+		log_info_msg "Starting NFS statd..."
 		start_daemon /sbin/rpc.statd --no-notify
 		evaluate_retval
 		log_info_msg "Starting NFS nfsd..."
 		start_daemon /sbin/rpc.nfsd -p ${PORT} ${PROCESSES}
 		evaluate_retval
-		log_info_msg "Starting NFS mountd..."
-		start_daemon /sbin/rpc.mountd
-		evaluate_retval
-		# Make certain that the list is refreshed on a restart.
-		log_info_msg "Exporting NFS Filesystems..."
-		/sbin/exportfs -ra 2>&1 > /dev/null
-		evaluate_retval; ;;
-	stop)	log_info_msg "Removing NFS Exported Filesystems..."
+		> /var/run/nfsd
+		> /var/run/nfsd.pid
+		ps x | grep nfsd >> /var/run/nfsd
+		sed '/grep/d' -i /var/run/nfsd
+		while read i; do printf "%s\n" ${i%%\?*} >> /var/run/nfsd.pid;done < /var/run/nfsd
+		rm -f /var/run/nfsd
+		;;
+	stop)
+		log_info_msg "Removing NFS Exported Filesystems..."
 		/sbin/exportfs -au 2>&1 > /dev/null
 		evaluate_retval
 		log_info_msg "Stopping NFS statd..."
 		killproc /sbin/rpc.statd
 		evaluate_retval
+		log_info_msg "Stopping NFS mountd..."
+		killproc /sbin/rpc.mountd
+		evaluate_retval
 		log_info_msg "Stopping NFS nfsd..."
 		# nfsd needs HUP.  Can't use killproc for kernel process.
 		killall -HUP nfsd
 		evaluate_retval
-		log_info_msg "Stopping NFS mountd..."
-		killproc /sbin/rpc.mountd
-		evaluate_retval
-		# Remove a pid file that isn't done automatically
+		# Remove a pid files that isn't done automatically
 		if [ -f /var/run/rpc.statd.pid ]; then
 			log_success_msg "Removing the rpc.statd pid file if it exists"
 			rm -f /var/run/rpc.statd.pid
-		fi; ;;
-	reload)	log_info_msg "Reloading NFS Server..."
-			/sbin/exportfs -ra
-			evaluate_retval; ;;
-	restart)	${0} stop; sleep 1; ${0} start; ;;
-	status)	status /sbin/rpc.mountd
-			## Special case for nfsd with no full path
-			statusproc nfsd; ;;
+		fi
+		if [ -f /var/run/nfsd.pid ]; then
+			log_success_msg "Removing the rpc.statd pid file if it exists"
+			rm -f /var/run/nfsd.pid
+		fi
+		;;
+	reload)
+		log_info_msg "Reloading NFS Server..."
+		/sbin/exportfs -ra
+		evaluate_retval
+		;;
+	restart)
+		${0} stop
+		sleep 1
+		${0} start
+		;;
+	status)
+		statusproc /sbin/rpc.mountd
+		statusproc /sbin/rpc.statd
+		statusproc -p /var/run/nfsd.pid rpc.nfsd
+		;;
 	*)	echo "Usage: ${0} {start|stop|reload|restart|status}"
-		exit 1; ;;
+		exit 1
+		;;
 esac
 # End /etc/init.d/nfs-server
