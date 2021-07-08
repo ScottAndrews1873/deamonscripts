@@ -60,6 +60,7 @@ install-nfs-server: create-dirs
 
 install-netfs: create-dirs
 	install -m ${MODE} init.d/netfs ${EXTDIR}/init.d/
+
 install-httpd: create-dirs
 	install -m ${MODE} init.d/httpd ${EXTDIR}/init.d/
 
@@ -76,4 +77,5 @@ install-httpd: create-dirs
 	install-unbound \
 	install-nfs-client \
 	install-nfs-server \
-	install-netfs
+	install-netfs \
+	install-httpd
